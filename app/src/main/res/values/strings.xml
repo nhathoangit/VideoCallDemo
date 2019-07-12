@@ -3,4 +3,13 @@
     <string name="text_welcoming_message">Please enter username and chat room name. \nYou can join existed chat room.</string>
     <string name="user_name">User Name</string>
     <string name="password">Password</string>
+    <string name="hint_user">UserName</string>
+    <string name="hint_password">PassWord</string>
+    <string name="login">Login</string>
+    <string name="ok">ok</string>
+    <string name="cancel">cancel</string>
+    <string name="login_fail_content">UserName or Password is empty</string>
+    <string name="signup_lowercase"><u>signup</u></string>
+    <string name="signup">SignUp</string>
+    <string name="descripe_signup">Please enter username and password to sign up accont.</string>
 </resources>
