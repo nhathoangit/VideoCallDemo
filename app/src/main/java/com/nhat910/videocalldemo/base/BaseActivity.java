@@ -1,4 +1,4 @@
-package com.nhat910.videocalldemo;
+package com.nhat910.videocalldemo.activity;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
