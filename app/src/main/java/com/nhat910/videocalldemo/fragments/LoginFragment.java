@@ -13,6 +13,11 @@ import com.nhat910.videocalldemo.R;
 import com.nhat910.videocalldemo.base.BaseFragment;
 import com.nhat910.videocalldemo.utils.AppUtils;
 import com.nhat910.videocalldemo.utils.KeyboardUtils;
+import com.nhat910.videocalldemo.utils.ValidateUtils;
+import com.quickblox.core.QBEntityCallback;
+import com.quickblox.core.exception.QBResponseException;
+import com.quickblox.users.QBUsers;
+import com.quickblox.users.model.QBUser;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -38,8 +43,8 @@ public class LoginFragment extends BaseFragment {
     public void OnClick(View view) {
         switch (view.getId()) {
             case R.id.fragSignIn_btnLogin:
-                if (AppUtils.validateLogin(getContext(), getString(R.string.login), etUser.getText().toString().trim(), etPass.getText().toString().trim()))
-                    Log.e("Login", "Success");
+                if (ValidateUtils.validateLogin(getContext(), etUser.getText().toString().trim(), etPass.getText().toString().trim()))
+                    authencationSignIn();
                 break;
             case R.id.fragSignIn_btnSignUp:
                 addFragment(new SignUpFragment(), true);
@@ -47,5 +52,23 @@ public class LoginFragment extends BaseFragment {
             default:
                 break;
         }
+    }
+
+    private void authencationSignIn() {
+        showLoading();
+        QBUser qbUser = new QBUser(etUser.getText().toString().trim(), etPass.getText().toString().trim());
+        QBUsers.signIn(qbUser).performAsync(new QBEntityCallback<QBUser>() {
+            @Override
+            public void onSuccess(QBUser qbUser, Bundle bundle) {
+                Log.e("login", qbUser.getLogin());
+                hideLoading();
+            }
+
+            @Override
+            public void onError(QBResponseException e) {
+                hideLoading();
+                AppUtils.showDialogMessage(getContext(), getString(R.string.unauthorize), e.getLocalizedMessage(), null);
+            }
+        });
     }
 }

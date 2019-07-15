@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import com.nhat910.videocalldemo.R;
 import com.nhat910.videocalldemo.activities.AuthActivity;
 import com.nhat910.videocalldemo.activities.MainActivity;
+import com.nhat910.videocalldemo.others.ProgressDialog;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -19,6 +20,7 @@ import butterknife.Unbinder;
  */
 public abstract class BaseActivity extends AppCompatActivity {
     private Unbinder mUnBinder;
+    private ProgressDialog progressDialog;
 
     public void setUnBinder(Unbinder unBinder) {
         mUnBinder = unBinder;
@@ -75,6 +77,21 @@ public abstract class BaseActivity extends AppCompatActivity {
         int count = fm.getBackStackEntryCount();
         for (int i = 0; i < count; ++i) {
             fm.popBackStack();
+        }
+    }
+
+    public void showLoading() {
+        if (progressDialog != null) {
+            progressDialog.show();
+        } else {
+            progressDialog = new ProgressDialog(this);
+            progressDialog.show();
+        }
+    }
+
+    public void hideLoading() {
+        if (progressDialog != null) {
+            progressDialog.dismiss();
         }
     }
 }

@@ -19,6 +19,18 @@ public class BaseFragment extends Fragment {
         }
     }
 
+    public void showLoading() {
+        if (getActivity() instanceof BaseActivity) {
+            ((BaseActivity) getActivity()).showLoading();
+        }
+    }
+
+    public void hideLoading() {
+        if (getActivity() instanceof BaseActivity) {
+            ((BaseActivity) getActivity()).hideLoading();
+        }
+    }
+
     @Override
     public void onDestroyView() {
         if (mUnBinder != null) {
