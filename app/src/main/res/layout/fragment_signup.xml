@@ -24,10 +24,26 @@
         android:textSize="20sp" />
 
     <EditText
+        android:id="@+id/fragSignUp_etFullName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:background="@drawable/shape_border_input_radius_20"
+        android:hint="@string/hint_fullname"
+        android:paddingStart="20dp"
+        android:paddingTop="10dp"
+        android:paddingEnd="20dp"
+        android:paddingBottom="10dp"
+        android:singleLine="true"
+        android:textSize="16sp" />
+
+    <EditText
         android:id="@+id/fragSignUp_etUser"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="20dp"
         android:background="@drawable/shape_border_input_radius_20"
         android:hint="@string/hint_user"
