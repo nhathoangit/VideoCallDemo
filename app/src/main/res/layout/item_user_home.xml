@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/itemUserHome_cl"
     android:layout_width="match_parent"
     android:layout_height="70dp">
 
@@ -16,11 +18,19 @@
         <FrameLayout
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:background="@drawable/shape_circle_crop"
+            android:background="@drawable/shape_circle_blue"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/itemUserHome_imgOnline"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_gravity="right"
+                android:src="@drawable/shape_circle_green"
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/itemUserHome_imgName"

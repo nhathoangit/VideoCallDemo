@@ -1,10 +1,10 @@
-package com.nhat910.videocalldemo.activities;
+package com.nhat910.videocalldemo.ui.auth;
 
 import android.os.Bundle;
 
 import com.nhat910.videocalldemo.R;
-import com.nhat910.videocalldemo.base.BaseActivity;
-import com.nhat910.videocalldemo.fragments.LoginFragment;
+import com.nhat910.videocalldemo.ui.auth.login.LoginFragment;
+import com.nhat910.videocalldemo.ui.base.BaseActivity;
 
 import butterknife.ButterKnife;
 

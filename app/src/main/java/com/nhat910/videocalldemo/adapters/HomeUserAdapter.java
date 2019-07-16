@@ -8,12 +8,18 @@ import android.view.ViewGroup;
 
 import com.nhat910.videocalldemo.R;
 import com.nhat910.videocalldemo.holder.HomeUserHolder;
+import com.nhat910.videocalldemo.interfaces.ItemClickListener;
 import com.quickblox.users.model.QBUser;
 
 import java.util.List;
 
 public class HomeUserAdapter extends RecyclerView.Adapter<HomeUserHolder> {
     private List<QBUser> _data;
+    private ItemClickListener listener;
+
+    public void setListener(ItemClickListener listener) {
+        this.listener = listener;
+    }
 
     public HomeUserAdapter(List<QBUser> _data) {
         this._data = _data;
@@ -30,6 +36,13 @@ public class HomeUserAdapter extends RecyclerView.Adapter<HomeUserHolder> {
     public void onBindViewHolder(@NonNull HomeUserHolder homeUserHolder, int i) {
         homeUserHolder.tvUser.setText(_data.get(i).getFullName());
         homeUserHolder.imgName.setText(String.valueOf(_data.get(i).getFullName().charAt(0)).toUpperCase());
+        //if(_data.get(i).getLogin().equals(QBChatService.getInstance().getUser().getLogin()))
+        homeUserHolder.imgOnline.setVisibility(View.VISIBLE);
+        homeUserHolder.clBtn.setOnClickListener(v -> {
+            if(listener != null){
+                listener.onItemClick(homeUserHolder.getAdapterPosition());
+            }
+        });
     }
 
     @Override

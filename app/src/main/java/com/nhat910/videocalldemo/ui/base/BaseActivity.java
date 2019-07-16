@@ -1,4 +1,4 @@
-package com.nhat910.videocalldemo.base;
+package com.nhat910.videocalldemo.ui.base;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -8,8 +8,8 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 
 import com.nhat910.videocalldemo.R;
-import com.nhat910.videocalldemo.activities.AuthActivity;
-import com.nhat910.videocalldemo.activities.MainActivity;
+import com.nhat910.videocalldemo.ui.auth.AuthActivity;
+import com.nhat910.videocalldemo.ui.MainActivity;
 import com.nhat910.videocalldemo.others.ProgressDialog;
 
 import butterknife.ButterKnife;
@@ -18,7 +18,7 @@ import butterknife.Unbinder;
 /*
  * Created by NhatHoang on 12/07/2019.
  */
-public abstract class BaseActivity extends AppCompatActivity {
+public abstract class BaseActivity extends AppCompatActivity implements MvpView{
     private Unbinder mUnBinder;
     private ProgressDialog progressDialog;
 
@@ -41,12 +41,31 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
+    @Override
     public void addFragment(BaseFragment fragment, boolean isAddToBackStack) {
         addReplaceFragment(fragment, false, isAddToBackStack);
     }
 
+    @Override
     public void replaceFragment(BaseFragment fragment, boolean isAddToBackStack) {
         addReplaceFragment(fragment, true, isAddToBackStack);
+    }
+
+    @Override
+    public void showLoading() {
+        if (progressDialog != null) {
+            progressDialog.show();
+        } else {
+            progressDialog = new ProgressDialog(this);
+            progressDialog.show();
+        }
+    }
+
+    @Override
+    public void hideLoading() {
+        if (progressDialog != null) {
+            progressDialog.dismiss();
+        }
     }
 
     private void addReplaceFragment(BaseFragment fragment, boolean isReplace, boolean isAddToBackStack) {
@@ -77,21 +96,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         int count = fm.getBackStackEntryCount();
         for (int i = 0; i < count; ++i) {
             fm.popBackStack();
-        }
-    }
-
-    public void showLoading() {
-        if (progressDialog != null) {
-            progressDialog.show();
-        } else {
-            progressDialog = new ProgressDialog(this);
-            progressDialog.show();
-        }
-    }
-
-    public void hideLoading() {
-        if (progressDialog != null) {
-            progressDialog.dismiss();
         }
     }
 }

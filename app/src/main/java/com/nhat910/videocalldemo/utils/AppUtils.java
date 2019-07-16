@@ -4,7 +4,6 @@ package com.nhat910.videocalldemo.utils;
 import android.content.Context;
 import android.support.annotation.Nullable;
 
-import com.nhat910.videocalldemo.R;
 import com.nhat910.videocalldemo.interfaces.ConfirmListener;
 import com.nhat910.videocalldemo.others.MessageDialog;
 

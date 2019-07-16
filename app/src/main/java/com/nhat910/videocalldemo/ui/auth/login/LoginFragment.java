@@ -1,4 +1,4 @@
-package com.nhat910.videocalldemo.fragments;
+package com.nhat910.videocalldemo.ui.auth.login;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,14 +11,12 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 
 import com.nhat910.videocalldemo.R;
-import com.nhat910.videocalldemo.activities.MainActivity;
-import com.nhat910.videocalldemo.base.BaseFragment;
+import com.nhat910.videocalldemo.ui.MainActivity;
+import com.nhat910.videocalldemo.ui.auth.signup.SignUpFragment;
+import com.nhat910.videocalldemo.ui.base.BaseFragment;
 import com.nhat910.videocalldemo.utils.AppUtils;
 import com.nhat910.videocalldemo.utils.KeyboardUtils;
 import com.nhat910.videocalldemo.utils.ValidateUtils;
-import com.quickblox.core.QBEntityCallback;
-import com.quickblox.core.exception.QBResponseException;
-import com.quickblox.users.QBUsers;
 import com.quickblox.users.model.QBUser;
 
 import java.util.Objects;
@@ -27,7 +25,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class LoginFragment extends BaseFragment{
+public class LoginFragment extends BaseFragment implements LoginContract.LoginView{
+    LoginPresenterImp presenterImp;
     @BindView(R.id.fragSignIn_etUser)
     EditText etUser;
     @BindView(R.id.fragSignIn_etPass)
@@ -38,17 +37,24 @@ public class LoginFragment extends BaseFragment{
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_signin, container, false);
         setUnBinder(ButterKnife.bind(this, view));
+        presenterImp = new LoginPresenterImp();
+        presenterImp.onAttach(this);
         KeyboardUtils.setupUI(view, getActivity());
         return view;
     }
 
+    @Override
+    public void onDestroy() {
+        presenterImp.onDetach();
+        super.onDestroy();
+    }
 
     @OnClick({R.id.fragSignIn_btnLogin, R.id.fragSignIn_btnSignUp})
     public void OnClick(View view) {
         switch (view.getId()) {
             case R.id.fragSignIn_btnLogin:
                 if (ValidateUtils.validateLogin(getContext(), etUser.getText().toString().trim(), etPass.getText().toString().trim()))
-                    authencationSignIn();
+                    presenterImp.loginAuth(etUser.getText().toString().trim(), etPass.getText().toString().trim());
                 break;
             case R.id.fragSignIn_btnSignUp:
                 addFragment(new SignUpFragment(), true);
@@ -58,24 +64,16 @@ public class LoginFragment extends BaseFragment{
         }
     }
 
-    private void authencationSignIn() {
-        showLoading();
-        QBUser qbUser = new QBUser(etUser.getText().toString().trim(), etPass.getText().toString().trim());
-        QBUsers.signIn(qbUser).performAsync(new QBEntityCallback<QBUser>() {
-            @Override
-            public void onSuccess(QBUser qbUser, Bundle bundle) {
-                Log.e("login", qbUser.getLogin());
-                hideLoading();
-                Intent intent = new Intent(getActivity(), MainActivity.class);
-                startActivity(intent);
-                Objects.requireNonNull(getActivity()).finish();
-            }
+    @Override
+    public void loginSuccess(QBUser qbUser) {
+        Log.e("login", qbUser.getLogin());
+        Intent intent = new Intent(getActivity(), MainActivity.class);
+        startActivity(intent);
+        Objects.requireNonNull(getActivity()).finish();
+    }
 
-            @Override
-            public void onError(QBResponseException e) {
-                hideLoading();
-                AppUtils.showDialogMessage(getContext(), getString(R.string.unauthorize), e.getLocalizedMessage(), null);
-            }
-        });
+    @Override
+    public void loginError(String errorMessage) {
+        AppUtils.showDialogMessage(getContext(), getString(R.string.unauthorize), errorMessage, null);
     }
 }
