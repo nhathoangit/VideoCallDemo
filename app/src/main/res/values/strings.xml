@@ -14,6 +14,7 @@
     <string name="error">Error</string>
     <string name="cancel">cancel</string>
     <string name="success">Success</string>
+    <string name="hint_input_chat">Enter your message</string>
     <string name="signup_success_content">Create user successfully!!!</string>
     <string name="empty_fullname_content">FullName is empty</string>
     <string name="empty_username_content">UserName is empty</string>

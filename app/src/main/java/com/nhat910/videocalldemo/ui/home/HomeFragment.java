@@ -14,6 +14,7 @@ import com.nhat910.videocalldemo.R;
 import com.nhat910.videocalldemo.adapters.HomeUserAdapter;
 import com.nhat910.videocalldemo.interfaces.ItemClickListener;
 import com.nhat910.videocalldemo.ui.base.BaseFragment;
+import com.nhat910.videocalldemo.ui.chat.ChatFragment;
 import com.nhat910.videocalldemo.utils.AppUtils;
 import com.quickblox.chat.model.QBChatDialog;
 import com.quickblox.users.model.QBUser;
@@ -82,7 +83,7 @@ public class HomeFragment extends BaseFragment implements HomeContract.HomeView,
 
     @Override
     public void createChatSuccess(QBChatDialog qbChatDialog) {
-        Log.e("Chat room Id", qbChatDialog.getDialogId());
+        addFragment(ChatFragment.newInstance(qbChatDialog), true);
     }
 
     @Override

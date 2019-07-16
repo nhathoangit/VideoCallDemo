@@ -37,6 +37,7 @@ public class HomePresenterImp extends BasePresenter<HomeContract.HomeView> imple
     public void createPrivateChat(QBUser qbUser) {
         getView().showLoading();
         QBChatDialog qbChatDialog = DialogUtils.buildPrivateDialog(qbUser.getId());
+        qbChatDialog.setName(qbUser.getFullName());
         QBRestChatService.createChatDialog(qbChatDialog).performAsync(new QBEntityCallback<QBChatDialog>() {
             @Override
             public void onSuccess(QBChatDialog qbChatDialog, Bundle bundle) {
