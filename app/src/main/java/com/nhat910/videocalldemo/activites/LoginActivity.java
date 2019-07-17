@@ -1,7 +1,9 @@
-package com.nhat910.videocalldemo;
+package com.nhat910.videocalldemo.activites;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import com.nhat910.videocalldemo.R;
 
 public class LoginActivity extends AppCompatActivity {
 
