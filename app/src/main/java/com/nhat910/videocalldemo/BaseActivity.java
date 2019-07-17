@@ -1,8 +1,9 @@
-package com.nhat910.videocalldemo.activites;
+package com.nhat910.videocalldemo;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
