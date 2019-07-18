@@ -4,18 +4,20 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
 import com.nhat910.videocalldemo.R;
+import com.nhat910.videocalldemo.others.Constant;
 import com.nhat910.videocalldemo.ui.MainActivity;
 import com.nhat910.videocalldemo.ui.auth.signup.SignUpFragment;
 import com.nhat910.videocalldemo.ui.base.BaseFragment;
 import com.nhat910.videocalldemo.utils.AppUtils;
 import com.nhat910.videocalldemo.utils.KeyboardUtils;
+import com.nhat910.videocalldemo.utils.SharedPrefUtils;
 import com.nhat910.videocalldemo.utils.ValidateUtils;
 import com.quickblox.users.model.QBUser;
 
@@ -25,7 +27,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class LoginFragment extends BaseFragment implements LoginContract.LoginView{
+public class LoginFragment extends BaseFragment implements LoginContract.LoginView {
     LoginPresenterImp presenterImp;
     @BindView(R.id.fragSignIn_etUser)
     EditText etUser;
@@ -40,7 +42,16 @@ public class LoginFragment extends BaseFragment implements LoginContract.LoginVi
         presenterImp = new LoginPresenterImp();
         presenterImp.onAttach(this);
         KeyboardUtils.setupUI(view, getActivity());
+        initView();
         return view;
+    }
+
+    private void initView() {
+        String userId = SharedPrefUtils.getString(getContext(), Constant.USER_ID);
+        String pass = SharedPrefUtils.getString(getContext(), Constant.USER_PASS);
+        if (!TextUtils.isEmpty(userId) && !TextUtils.isEmpty(pass)) {
+            presenterImp.getUserWithId(userId, pass);
+        }
     }
 
     @Override
@@ -66,7 +77,8 @@ public class LoginFragment extends BaseFragment implements LoginContract.LoginVi
 
     @Override
     public void loginSuccess(QBUser qbUser) {
-        Log.e("login", qbUser.getLogin());
+        SharedPrefUtils.setString(getContext(), Constant.USER_ID, qbUser.getId().toString());
+        SharedPrefUtils.setString(getContext(), Constant.USER_PASS, qbUser.getPassword());
         Intent intent = new Intent(getActivity(), MainActivity.class);
         startActivity(intent);
         Objects.requireNonNull(getActivity()).finish();

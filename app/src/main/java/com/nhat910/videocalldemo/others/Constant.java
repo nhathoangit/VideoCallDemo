@@ -8,4 +8,16 @@ public class Constant {
 
     //bundle
     public static final String DATA_SEND_CHAT_DIALOG = "QBDialog_data";
+
+
+    //share preference
+    public static final String USER_ID = "user_id";
+    public static final String USER_PASS = "user_pass";
+
+    //View type
+    public static final int CHAT_RECEIVE_TYPE = 2;
+    public static final int CHAT_SEND_TYPE = 1;
+
+    //menu list popup
+    public static final String LOG_OUT = "Log out";
 }

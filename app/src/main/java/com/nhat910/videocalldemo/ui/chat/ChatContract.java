@@ -11,9 +11,19 @@ public interface ChatContract {
         void loadSuccess(ArrayList<QBChatMessage> qbChatMessages);
 
         void loadError(String errorMessage);
+
+        void receivedMessage(QBChatMessage qbChatMessage);
+
+        void sendMessage(QBChatMessage qbChatMessage);
     }
 
     interface ChatPresenter{
         void getHistoryMessage(QBChatDialog qbChatDialog);
+
+        void inComingMessage(QBChatDialog qbChatDialog);
+
+        void sendMessage(QBChatDialog qbChatDialog,String message);
+
+        void leaveDialog(QBChatDialog qbChatDialog);
     }
 }

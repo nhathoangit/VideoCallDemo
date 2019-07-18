@@ -5,9 +5,11 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.nhat910.videocalldemo.R;
@@ -19,7 +21,7 @@ import com.quickblox.chat.model.QBChatDialog;
 import com.quickblox.chat.model.QBChatMessage;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Collections;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -30,11 +32,13 @@ public class ChatFragment extends BaseFragment implements ChatContract.ChatView 
     TextView tvOppnentTitle;
     @BindView(R.id.fragChat_rv)
     RecyclerView rvChat;
+    @BindView(R.id.fragChat_etMessage)
+    EditText etMessage;
 
     ChatPresenterImp presenterImp;
     QBChatDialog qbChatDialog;
     ChatAdapter chatAdapter;
-    List<QBChatMessage> _data;
+    ArrayList<QBChatMessage> _data;
 
     public static ChatFragment newInstance(QBChatDialog qbChatDialog) {
         Bundle args = new Bundle();
@@ -63,31 +67,39 @@ public class ChatFragment extends BaseFragment implements ChatContract.ChatView 
             if (qbChatDialog != null) {
                 tvOppnentTitle.setText(qbChatDialog.getName());
                 presenterImp.getHistoryMessage(qbChatDialog);
+                presenterImp.inComingMessage(qbChatDialog);
             }
         }
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this.getContext());
+        linearLayoutManager.setReverseLayout(true);
         rvChat.setLayoutManager(linearLayoutManager);
-        chatAdapter = new ChatAdapter((ArrayList<QBChatMessage>) _data);
+        chatAdapter = new ChatAdapter(_data);
         rvChat.setAdapter(chatAdapter);
     }
 
     @Override
     public void onDestroy() {
+        presenterImp.leaveDialog(qbChatDialog);
         presenterImp.onDetach();
         super.onDestroy();
     }
 
-    @OnClick({R.id.fragChat_btnBack})
-    public void OnClick(View view){
-        switch (view.getId()){
+    @OnClick({R.id.fragChat_btnBack, R.id.fragChat_btnSend})
+    public void OnClick(View view) {
+        switch (view.getId()) {
             case R.id.fragChat_btnBack:
                 getActivity().onBackPressed();
+                break;
+            case R.id.fragChat_btnSend:
+                if (!TextUtils.isEmpty(etMessage.getText().toString()))
+                    presenterImp.sendMessage(qbChatDialog, etMessage.getText().toString());
                 break;
         }
     }
 
     @Override
     public void loadSuccess(ArrayList<QBChatMessage> qbChatMessages) {
+        Collections.reverse(qbChatMessages);
         _data.addAll(qbChatMessages);
         chatAdapter.notifyDataSetChanged();
     }
@@ -95,5 +107,18 @@ public class ChatFragment extends BaseFragment implements ChatContract.ChatView 
     @Override
     public void loadError(String errorMessage) {
         AppUtils.showDialogMessage(getContext(), getString(R.string.unauthorize), errorMessage, null);
+    }
+
+    @Override
+    public void receivedMessage(QBChatMessage qbChatMessage) {
+        _data.add(0, qbChatMessage);
+        chatAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void sendMessage(QBChatMessage qbChatMessage) {
+        _data.add(0, qbChatMessage);
+        chatAdapter.notifyDataSetChanged();
+        etMessage.setText("");
     }
 }

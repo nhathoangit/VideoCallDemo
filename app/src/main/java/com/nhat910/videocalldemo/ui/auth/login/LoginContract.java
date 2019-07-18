@@ -10,7 +10,9 @@ public interface LoginContract {
         void loginError(String errorMessage);
     }
 
-    interface LoginPresenter{
-        void loginAuth(String userName,String password);
+    interface LoginPresenter {
+        void loginAuth(String userName, String password);
+
+        void getUserWithId(String id, String password);
     }
 }

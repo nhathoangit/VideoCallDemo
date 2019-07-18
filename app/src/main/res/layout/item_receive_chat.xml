@@ -9,7 +9,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/shape_radius_chat_dialog_grey"
-        android:minWidth="60dp"
+        android:layout_marginStart="10dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -17,7 +17,8 @@
             android:id="@+id/itemReceiveChat_tvContent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_gravity="center_vertical"
+            android:text="s"
             android:maxWidth="300dp"
             android:padding="15dp"
             android:textColor="@color/colorDark"
