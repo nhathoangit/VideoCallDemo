@@ -37,7 +37,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_marginTop="0dp"
-            android:layout_toEndOf="@+id/rv_list_chat"
+            android:layout_alignParentEnd="true"
             android:src="@drawable/ic_cancel_black_24dp" />
         <LinearLayout
             android:gravity="center_vertical"
@@ -48,6 +48,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <EditText
+                android:id="@+id/et_chatbox"
                 android:layout_margin="@dimen/w5"
                 android:padding="@dimen/w5"
                 android:background="@drawable/bg_edittext"
@@ -56,6 +57,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
             <ImageView
+                android:id="@+id/iv_sendChat"
                 android:layout_margin="@dimen/w5"
                 android:layout_weight="1"
                 android:layout_width="wrap_content"

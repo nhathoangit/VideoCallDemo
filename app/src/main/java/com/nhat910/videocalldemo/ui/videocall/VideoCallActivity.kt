@@ -1,9 +1,12 @@
-package com.nhat910.videocalldemo.ui.videocall
+package com.nhat910.videocalldemo.activites
 
 import android.os.Bundle
+import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.View
+import android.widget.EditText
+import android.widget.ImageView
 import android.widget.Toast
 import android.widget.ToggleButton
 import com.nhat910.videocalldemo.R
@@ -11,9 +14,13 @@ import com.quickblox.auth.QBAuth
 import com.quickblox.auth.session.QBSession
 import com.quickblox.auth.session.QBSettings
 import com.quickblox.chat.QBChatService
+import com.quickblox.chat.QBRestChatService
+import com.quickblox.chat.QBSignaling
 import com.quickblox.chat.QBWebRTCSignaling
 import com.quickblox.chat.connections.tcp.QBTcpChatConnectionFabric
 import com.quickblox.chat.connections.tcp.QBTcpConfigurationBuilder
+import com.quickblox.chat.listeners.QBVideoChatSignalingListener
+import com.quickblox.chat.listeners.QBVideoChatSignalingManagerListener
 import com.quickblox.core.QBEntityCallback
 import com.quickblox.core.exception.QBResponseException
 import com.quickblox.users.model.QBUser
@@ -26,6 +33,8 @@ import kotlinx.android.synthetic.main.activity_video_call.*
 import org.webrtc.EglBase
 import org.webrtc.RendererCommon
 import org.webrtc.SurfaceViewRenderer
+import org.webrtc.VideoFileRenderer
+import org.webrtc.voiceengine.WebRtcAudioManager
 
 class VideoCallActivity  : AppCompatActivity(),
         View.OnClickListener,
@@ -34,6 +43,7 @@ class VideoCallActivity  : AppCompatActivity(),
         QBRTCSessionStateCallback<QBRTCSession>,
         QBRTCSessionConnectionCallbacks,
         QBRTCSignalingCallback{
+
     override fun onSuccessSendingPacket(p0: QBSignalingSpec.QBSignalCMD?, p1: Int?) {
         Toast.makeText(this,"Connect Success",Toast.LENGTH_SHORT).show()
     }
@@ -59,9 +69,11 @@ class VideoCallActivity  : AppCompatActivity(),
     lateinit var  qbrtcChatService: QBChatService
     lateinit var toggle_startChat : ToggleButton
     lateinit var toggle_hangUpCall : ToggleButton
+    lateinit var sendChatButton: ImageView
+    lateinit var chatBox : EditText
     lateinit var localVideoTrack: QBRTCVideoTrack
     private var isCurrentCameraFront: Boolean = false
-    var currentsession: QBRTCSession? = null
+    lateinit var currentsession: QBRTCSession
     private lateinit var rtcClient: QBRTCClient
     var userid = 94902557
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -78,8 +90,13 @@ class VideoCallActivity  : AppCompatActivity(),
         localVideoView = findViewById(R.id.localView)
         toggle_startChat = findViewById(R.id.toggle_start_chat)
         remoteFullScreenVideoView =findViewById(R.id.opponentView)
-        toggle_startChat.setOnClickListener(this)
         toggle_hangUpCall = findViewById(R.id.button_hangup_call)
+        chatBox = findViewById(R.id.et_chatbox)
+        sendChatButton = findViewById(R.id.iv_sendChat)
+
+        //initOnClickListener
+        sendChatButton.setOnClickListener(this)
+        toggle_startChat.setOnClickListener(this)
         toggle_hangUpCall.setOnClickListener(this)
         iv_cancel_chatView.setOnClickListener(this)
         localVideoView.setZOrderMediaOverlay(true)
@@ -89,9 +106,36 @@ class VideoCallActivity  : AppCompatActivity(),
         localVideoView.requestLayout()
         initCorrectSizeForLocalView()
     }
+
+    override fun onPause() {
+        super.onPause()
+        releaseView()
+        releaseCurrentSession()
+    }
+
+    override fun onClick(v: View?) {
+        when (v!!.id){
+            R.id.toggle_start_chat->{
+                view_action_button.visibility = View.GONE
+                rl_chat_container.visibility = View.VISIBLE
+            }
+            R.id.iv_cancel_chatView->{
+                view_action_button.visibility = View.VISIBLE
+                rl_chat_container.visibility = View.GONE
+            }
+            R.id.button_hangup_call->{
+                currentsession.hangUp(HashMap())
+            }
+            R.id.iv_sendChat->{
+                userid = chatBox.text.toString().toInt()
+                Toast.makeText(this,"Connected to $userid",Toast.LENGTH_SHORT).show()
+                startCall()
+            }
+        }
+    }
     fun login(){
         val login ="cccc"
-        val password = "01200121"
+        val password = "123456789"
         var user  : QBUser  = QBUser(login,password)
         QBAuth.createSession(user).performAsync(object:QBEntityCallback<QBSession>{
             override fun onSuccess(p0: QBSession?, p1: Bundle?) {
@@ -121,6 +165,22 @@ class VideoCallActivity  : AppCompatActivity(),
         QBChatService.setDebugEnabled(true)
         qbrtcChatService = QBChatService.getInstance()
     }
+    fun addListener(){
+        currentsession.addVideoTrackCallbacksListener(this)
+        currentsession.addSessionCallbacksListener(this)
+        currentsession.addSignalingCallback(this)
+    }
+    fun releaseCurrentSession() {
+        currentsession.removeSignalingCallback(this)
+        currentsession.removeSessionCallbacksListener(this)
+        rtcClient.removeSessionsCallbacksListener(this)
+        currentsession.removeVideoTrackCallbacksListener(this)
+
+    }
+    fun releaseView(){
+        localVideoView.release()
+        remoteFullScreenVideoView!!.release()
+    }
     fun signallingManager(){
         rtcClient = QBRTCClient.getInstance(applicationContext)
 
@@ -138,10 +198,10 @@ class VideoCallActivity  : AppCompatActivity(),
         val userInfo : Map<String,String> = HashMap()
         val qbrtcClient = QBRTCClient.getInstance(applicationContext)
         val session  : QBRTCSession = qbrtcClient.createNewSessionWithOpponents(opponents,qbConferenceType)
-        session.addVideoTrackCallbacksListener(this)
-        session.addSessionCallbacksListener(this)
-        session.addSignalingCallback(this)
-        session.startCall(userInfo)
+        currentsession = session
+        addListener()
+        currentsession.startCall(userInfo)
+        Log.e("CALL","Session was Created : $currentsession")
 
     }
     fun initCorrectSizeForLocalView() {
@@ -182,21 +242,7 @@ class VideoCallActivity  : AppCompatActivity(),
         fillVideoView(remoteFullScreenVideoView!!, p1!!, true)
         updateVideoView(remoteFullScreenVideoView!!, false,RendererCommon.ScalingType.SCALE_ASPECT_FILL)
     }
-    override fun onClick(v: View?) {
-        when (v!!.id){
-            R.id.toggle_start_chat->{
-                view_action_button.visibility = View.GONE
-                rl_chat_container.visibility = View.VISIBLE
-            }
-            R.id.iv_cancel_chatView->{
-                view_action_button.visibility = View.VISIBLE
-                rl_chat_container.visibility = View.GONE
-            }
-            R.id.button_hangup_call->{
-                startCall()
-            }
-        }
-    }
+
     override fun onUserNotAnswer(p0: QBRTCSession?, p1: Int?) {
 
 
@@ -206,8 +252,19 @@ class VideoCallActivity  : AppCompatActivity(),
 
     }
 
-    override fun onReceiveHangUpFromUser(p0: QBRTCSession?, p1: Int?, p2: MutableMap<String, String>?) {
-
+    override fun onReceiveHangUpFromUser(p0: QBRTCSession?, userID: Int?, p2: MutableMap<String, String>?) {
+        if(p0 == currentsession){
+            if(userID == p0.callerID){
+                currentsession.let {
+                    it.hangUp(HashMap())
+                    releaseCurrentSession()
+                    releaseView()
+                }
+            }
+        }else{
+            releaseCurrentSession()
+            releaseView()
+        }
     }
 
     override fun onCallAcceptByUser(p0: QBRTCSession?, p1: Int?, p2: MutableMap<String, String>?) {
@@ -216,9 +273,12 @@ class VideoCallActivity  : AppCompatActivity(),
     }
 
     override fun onReceiveNewSession(p0: QBRTCSession?) {
-        Log.e("KKK","onReceiveNewSession : ${p0.toString()}")
-        p0!!.addVideoTrackCallbacksListener(this)
-        p0!!.acceptCall(p0.userInfo)
+        Log.e("KKK","onReceiveNewSession : $p0")
+        if (p0 != null) {
+            currentsession = p0
+            addListener()
+            currentsession.acceptCall(p0.userInfo)
+        }
     }
 
     override fun onUserNoActions(p0: QBRTCSession?, p1: Int?) {
