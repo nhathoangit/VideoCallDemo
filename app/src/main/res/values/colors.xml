@@ -67,4 +67,13 @@
     <color name="random_color_9">#166642</color>
     <color name="random_color_10">#bdbdbd</color>
 
+    <color name="colorTransparent">#00FFFFFF</color>
+    <color name="colorDark">#000000</color>
+    <color name="colorGreen">#58EB0D</color>
+    <color name="colorBrightGreen">#8B57C71A</color>
+    <color name="colorDarkGreen">#278F09</color>
+    <color name="colorWhite">#FFFFFF</color>
+    <color name="silver">#c8c7cc</color>
+    <color name="bright_blue">#007aff</color>
+    <color name="dark_blue">#033F83</color>
 </resources>

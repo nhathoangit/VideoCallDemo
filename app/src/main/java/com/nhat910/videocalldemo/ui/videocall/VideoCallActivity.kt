@@ -1,7 +1,6 @@
-package com.nhat910.videocalldemo.activites
+package com.nhat910.videocalldemo.ui.videocall
 
 import android.os.Bundle
-import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.View
@@ -12,13 +11,9 @@ import com.quickblox.auth.QBAuth
 import com.quickblox.auth.session.QBSession
 import com.quickblox.auth.session.QBSettings
 import com.quickblox.chat.QBChatService
-import com.quickblox.chat.QBRestChatService
-import com.quickblox.chat.QBSignaling
 import com.quickblox.chat.QBWebRTCSignaling
 import com.quickblox.chat.connections.tcp.QBTcpChatConnectionFabric
 import com.quickblox.chat.connections.tcp.QBTcpConfigurationBuilder
-import com.quickblox.chat.listeners.QBVideoChatSignalingListener
-import com.quickblox.chat.listeners.QBVideoChatSignalingManagerListener
 import com.quickblox.core.QBEntityCallback
 import com.quickblox.core.exception.QBResponseException
 import com.quickblox.users.model.QBUser
@@ -31,8 +26,6 @@ import kotlinx.android.synthetic.main.activity_video_call.*
 import org.webrtc.EglBase
 import org.webrtc.RendererCommon
 import org.webrtc.SurfaceViewRenderer
-import org.webrtc.VideoFileRenderer
-import org.webrtc.voiceengine.WebRtcAudioManager
 
 class VideoCallActivity  : AppCompatActivity(),
         View.OnClickListener,
