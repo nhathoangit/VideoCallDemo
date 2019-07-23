@@ -2,7 +2,6 @@ package com.nhat910.videocalldemo.utils;
 
 import android.content.Context;
 import android.text.TextUtils;
-import android.util.Patterns;
 
 import com.nhat910.videocalldemo.R;
 

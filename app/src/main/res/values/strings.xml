@@ -26,5 +26,6 @@
     <string name="invaild_email">Invail Email</string>
     <string name="signup_lowercase"><u>signup</u></string>
     <string name="signup">SignUp</string>
+    <string name="calling_you">calling you …</string>
     <string name="descripe_signup">Please enter username and password to sign up accont.</string>
 </resources>

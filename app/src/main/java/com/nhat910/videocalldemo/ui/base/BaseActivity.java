@@ -37,7 +37,6 @@ public abstract class BaseActivity extends AppCompatActivity implements MvpView{
         if (mUnBinder != null) {
             mUnBinder.unbind();
         }
-        clearAllBackStack();
         super.onDestroy();
     }
 

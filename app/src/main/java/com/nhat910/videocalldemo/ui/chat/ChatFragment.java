@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nhat910.videocalldemo.R;
@@ -26,6 +27,7 @@ import java.util.Collections;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnTextChanged;
 
 public class ChatFragment extends BaseFragment implements ChatContract.ChatView {
     @BindView(R.id.fragChat_tvOppnentNameTitle)
@@ -34,6 +36,10 @@ public class ChatFragment extends BaseFragment implements ChatContract.ChatView 
     RecyclerView rvChat;
     @BindView(R.id.fragChat_etMessage)
     EditText etMessage;
+    @BindView(R.id.fragChat_btnSend)
+    ImageView btnSend;
+    @BindView(R.id.fragChat_btnCall)
+    ImageView btnCall;
 
     ChatPresenterImp presenterImp;
     QBChatDialog qbChatDialog;
@@ -97,6 +103,17 @@ public class ChatFragment extends BaseFragment implements ChatContract.ChatView 
         }
     }
 
+    @OnTextChanged(R.id.fragChat_etMessage)
+    public void OnTextChange(CharSequence charSequence) {
+        if (charSequence.length() != 0) {
+            btnSend.setVisibility(View.VISIBLE);
+            btnCall.setVisibility(View.GONE);
+        } else {
+            btnCall.setVisibility(View.VISIBLE);
+            btnSend.setVisibility(View.GONE);
+        }
+    }
+
     @Override
     public void loadSuccess(ArrayList<QBChatMessage> qbChatMessages) {
         Collections.reverse(qbChatMessages);
@@ -106,7 +123,7 @@ public class ChatFragment extends BaseFragment implements ChatContract.ChatView 
 
     @Override
     public void loadError(String errorMessage) {
-        AppUtils.showDialogMessage(getContext(), getString(R.string.unauthorize), errorMessage, null);
+        AppUtils.showDialogMessage(getContext(), getString(R.string.error), errorMessage, null);
     }
 
     @Override

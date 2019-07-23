@@ -43,6 +43,7 @@ object WebrtcSessionManagement:QBRTCClientSessionCallbacksImpl() {
     }
 
     override fun onSessionClosed(session: QBRTCSession?) {
+        Log.e("finish", session!!.sessionID.toString());
         super.onSessionClosed(session)
     }
 
