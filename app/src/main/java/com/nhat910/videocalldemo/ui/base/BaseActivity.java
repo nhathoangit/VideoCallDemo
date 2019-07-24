@@ -9,7 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.nhat910.videocalldemo.R;
 import com.nhat910.videocalldemo.ui.auth.AuthActivity;
-import com.nhat910.videocalldemo.ui.MainActivity;
+import com.nhat910.videocalldemo.ui.main.MainActivity;
 import com.nhat910.videocalldemo.others.ProgressDialog;
 
 import butterknife.ButterKnife;

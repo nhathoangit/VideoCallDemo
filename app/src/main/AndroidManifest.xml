@@ -24,8 +24,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.MainActivity"/>
-        <activity android:name=".activites.VideoCallActivity"/>
+        <activity android:name=".ui.main.MainActivity"/>
+        <activity android:name=".ui.videocall.VideoCallActivity"/>
     </application>
 
 </manifest>

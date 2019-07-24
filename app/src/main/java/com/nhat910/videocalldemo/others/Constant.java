@@ -9,7 +9,7 @@ public class Constant {
     //bundle
     public static final String DATA_SEND_CHAT_DIALOG = "QBDialog_data";
     public static final String CALLER_ID = "Caller_id";
-    public static final String SESSION_RTC ="SessionRTC";
+    public static final String CHAT_IN_VIDEO = "Chat_in_video";
 
     //share preference
     public static final String USER_ID = "user_id";

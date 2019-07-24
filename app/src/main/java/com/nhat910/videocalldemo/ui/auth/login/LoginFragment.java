@@ -12,7 +12,7 @@ import android.widget.EditText;
 
 import com.nhat910.videocalldemo.R;
 import com.nhat910.videocalldemo.others.Constant;
-import com.nhat910.videocalldemo.ui.MainActivity;
+import com.nhat910.videocalldemo.ui.main.MainActivity;
 import com.nhat910.videocalldemo.ui.auth.signup.SignUpFragment;
 import com.nhat910.videocalldemo.ui.base.BaseFragment;
 import com.nhat910.videocalldemo.utils.AppUtils;

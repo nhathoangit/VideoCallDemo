@@ -1,6 +1,7 @@
 package com.nhat910.videocalldemo.ui.chat;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import com.nhat910.videocalldemo.ui.base.BasePresenter;
 import com.quickblox.chat.QBChatService;
@@ -13,6 +14,7 @@ import com.quickblox.chat.model.QBChatMessage;
 import com.quickblox.chat.request.QBMessageGetBuilder;
 import com.quickblox.core.QBEntityCallback;
 import com.quickblox.core.exception.QBResponseException;
+import com.quickblox.videochat.webrtc.QBRTCTypes;
 
 import org.jivesoftware.smack.SmackException;
 
@@ -79,9 +81,10 @@ public class ChatPresenterImp extends BasePresenter<ChatContract.ChatView> imple
 
             @Override
             public void onError(QBResponseException e) {
-
+                Log.e("failed",e.getMessage());
             }
         });
+
     }
 
     @Override
@@ -91,5 +94,13 @@ public class ChatPresenterImp extends BasePresenter<ChatContract.ChatView> imple
         } catch (SmackException.NotConnectedException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void startCall(Integer opponentId) {
+        QBRTCTypes.QBConferenceType qbConferenceType = QBRTCTypes.QBConferenceType.QB_CONFERENCE_TYPE_VIDEO;
+        ArrayList<Integer> userCall = new ArrayList<>();
+        userCall.add(opponentId);
+        getView().prepareToCall(userCall,qbConferenceType);
     }
 }

@@ -1,12 +1,9 @@
 package com.nhat910.videocalldemo.ui.home;
 
-import android.support.annotation.Nullable;
-
 import com.nhat910.videocalldemo.ui.base.MvpView;
 import com.quickblox.chat.model.QBChatDialog;
 import com.quickblox.users.model.QBUser;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public interface HomeContract extends MvpView {
