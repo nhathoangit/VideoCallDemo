@@ -2,14 +2,15 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/layout_action_buttons"
-    android:layout_height="wrap_content"
     android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:layout_alignParentBottom="true"
     android:layout_centerHorizontal="true"
-    android:padding="@dimen/w10"
-    android:gravity="center_horizontal"
     android:background="@color/color_grey"
-    android:orientation="horizontal">
+    android:gravity="center_horizontal"
+    android:orientation="horizontal"
+    android:padding="@dimen/w10">
+
     <ToggleButton
         android:id="@+id/toggle_mic"
         android:layout_width="@dimen/toggle_button_params"
@@ -20,17 +21,19 @@
         android:gravity="center_vertical|center_horizontal"
         android:textOff=""
         android:textOn="" />
+
     <ToggleButton
-       android:background="@drawable/hangup_toggle_background"
         android:id="@+id/button_hangup_call"
         android:layout_width="@dimen/toggle_button_params"
         android:layout_height="@dimen/toggle_button_params"
         android:layout_gravity="center_vertical"
         android:layout_marginStart="@dimen/element_fragment_margin"
         android:layout_marginLeft="@dimen/element_fragment_margin"
+        android:background="@drawable/hangup_toggle_background"
         android:checked="true"
         android:textOff=""
         android:textOn="" />
+
     <ToggleButton
         android:id="@+id/toggle_camera"
         android:layout_width="@dimen/toggle_button_params"
@@ -41,18 +44,32 @@
         android:background="@drawable/call_cam_toggle_background"
         android:checked="true"
         android:textOff=""
-        android:textOn=""
-       />
-    <ToggleButton
-        android:id="@+id/toggle_start_chat"
-        android:layout_width="@dimen/toggle_button_params"
-        android:layout_height="@dimen/toggle_button_params"
-        android:layout_gravity="center_vertical"
+        android:textOn="" />
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/element_fragment_margin"
-        android:layout_marginLeft="@dimen/element_fragment_margin"
-        android:background="@drawable/call_speaker_toggle_background"
-        android:checked="true"
-        android:textOff=""
-        android:textOn=""
-       />
+        android:layout_marginLeft="@dimen/element_fragment_margin">
+
+        <ImageView
+            android:id="@+id/toggle_start_chat"
+            android:layout_width="@dimen/toggle_button_params"
+            android:layout_height="@dimen/toggle_button_params"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/call_speaker_toggle_background"
+            android:checked="true"
+            android:textOff=""
+            android:textOn="" />
+
+
+        <ImageView
+            android:id="@+id/actVideo_unReadChat"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_gravity="right"
+            android:visibility="gone"
+            android:background="@drawable/shape_circle_green"
+            />
+    </FrameLayout>
 </LinearLayout>

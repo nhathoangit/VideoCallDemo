@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.nhat910.videocalldemo.R;
 import com.nhat910.videocalldemo.adapters.ChatAdapter;
+import com.nhat910.videocalldemo.interfaces.ReceiveChatListener;
 import com.nhat910.videocalldemo.others.Constant;
 import com.nhat910.videocalldemo.ui.base.BaseFragment;
 import com.nhat910.videocalldemo.ui.videocall.VideoCallActivity;
@@ -56,15 +57,21 @@ public class ChatFragment extends BaseFragment implements ChatContract.ChatView 
     QBChatDialog qbChatDialog;
     ChatAdapter chatAdapter;
     ArrayList<QBChatMessage> _data;
+    ReceiveChatListener listener;
     boolean isVideo;
 
-    public static ChatFragment newInstance(QBChatDialog qbChatDialog, Boolean isVideo) {
+    public static ChatFragment newInstance(QBChatDialog qbChatDialog, Boolean isVideo,@Nullable ReceiveChatListener listener) {
         Bundle args = new Bundle();
         args.putSerializable(Constant.DATA_SEND_CHAT_DIALOG, qbChatDialog);
         args.putBoolean(Constant.CHAT_IN_VIDEO, isVideo);
         ChatFragment fragment = new ChatFragment();
         fragment.setArguments(args);
+        fragment.setListener(listener);
         return fragment;
+    }
+
+    private void setListener(ReceiveChatListener listener) {
+        this.listener = listener;
     }
 
 
@@ -120,8 +127,8 @@ public class ChatFragment extends BaseFragment implements ChatContract.ChatView 
                     presenterImp.sendMessage(qbChatDialog, etMessage.getText().toString());
                 break;
             case R.id.fragChat_btnCall:
-                for(int i=0;i<qbChatDialog.getOccupants().size();i++){
-                    if(!qbChatDialog.getOccupants().get(i).equals(QBChatService.getInstance().getUser().getId())){
+                for (int i = 0; i < qbChatDialog.getOccupants().size(); i++) {
+                    if (!qbChatDialog.getOccupants().get(i).equals(QBChatService.getInstance().getUser().getId())) {
                         presenterImp.startCall(qbChatDialog.getOccupants().get(i));
                     }
                 }
@@ -156,6 +163,9 @@ public class ChatFragment extends BaseFragment implements ChatContract.ChatView 
     public void receivedMessage(QBChatMessage qbChatMessage) {
         _data.add(0, qbChatMessage);
         chatAdapter.notifyDataSetChanged();
+        if(listener != null){
+            listener.receiveChat(qbChatMessage);
+        }
     }
 
     @Override

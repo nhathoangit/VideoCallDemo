@@ -92,6 +92,7 @@ public class HomePresenterImp extends BasePresenter<HomeContract.HomeView> imple
             @Override
             public void onSuccess(QBChatDialog qbChatDialog, Bundle bundle) {
                 qbChatDialog.initForChat(QBChatService.getInstance());
+                getQBDialog(null);
                 getView().createChatSuccess(qbChatDialog);
                 getView().hideLoading();
             }

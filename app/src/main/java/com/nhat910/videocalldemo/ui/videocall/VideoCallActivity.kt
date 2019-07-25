@@ -1,12 +1,14 @@
 package com.nhat910.videocalldemo.ui.videocall
 
 import android.content.Intent
+import android.media.Image
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.View
 import android.widget.*
 import com.nhat910.videocalldemo.R
+import com.nhat910.videocalldemo.interfaces.ReceiveChatListener
 import com.nhat910.videocalldemo.others.Constant
 import com.nhat910.videocalldemo.ui.base.BaseActivity
 import com.nhat910.videocalldemo.ui.chat.ChatFragment
@@ -60,10 +62,11 @@ class VideoCallActivity : BaseActivity(),
     private var isLocalVideoFullScreen: Boolean = false
     lateinit var localVideoView: QBRTCSurfaceView
     var remoteFullScreenVideoView: QBRTCSurfaceView? = null
-    lateinit var toggle_startChat: ToggleButton
+    lateinit var toggle_startChat: ImageView
     lateinit var toggle_hangUpCall: ToggleButton
     lateinit var localVideoTrack: QBRTCVideoTrack
     lateinit var closeChat: ImageView
+    lateinit var unReadMessage: ImageView
     lateinit var frContentChat: FrameLayout
     lateinit var mainContent: FrameLayout
     private var isCurrentCameraFront: Boolean = false
@@ -82,6 +85,7 @@ class VideoCallActivity : BaseActivity(),
         remoteFullScreenVideoView = findViewById(R.id.opponentView)
         toggle_hangUpCall = findViewById(R.id.button_hangup_call)
         closeChat = findViewById(R.id.actVideo_close)
+        unReadMessage = findViewById(R.id.actVideo_unReadChat)
         frContentChat = findViewById(R.id.act_frContent)
         mainContent = findViewById(R.id.content)
 
@@ -90,7 +94,9 @@ class VideoCallActivity : BaseActivity(),
         if (intent.hasExtra(Constant.DATA_SEND_CHAT_DIALOG)) {
             var qbChatDialog: QBChatDialog = intent.getSerializableExtra(Constant.DATA_SEND_CHAT_DIALOG) as QBChatDialog
             qbChatDialog.initForChat(QBChatService.getInstance())
-            replaceFragment(ChatFragment.newInstance(qbChatDialog, true), false);
+            replaceFragment(ChatFragment.newInstance(qbChatDialog, true, ReceiveChatListener {
+                unReadMessage.visibility = View.VISIBLE
+            }), false);
         }
 
         KeyboardUtils.setupUI(mainContent, this)
@@ -108,6 +114,8 @@ class VideoCallActivity : BaseActivity(),
         //init session
         currentsession = WebrtcSessionManagement.getCurrentSession()!!
         addListener()
+        onLocalVideoTrackReceive(currentsession, AppUtils.qbrtcVideoTrackLocal)
+        onRemoteVideoTrackReceive(currentsession, AppUtils.qbrtcVideoTrackRemote, 0)
     }
 
     override fun onPause() {
@@ -121,6 +129,7 @@ class VideoCallActivity : BaseActivity(),
             R.id.toggle_start_chat -> {
                 view_action_button.visibility = View.GONE
                 frContentChat.visibility = View.VISIBLE
+                unReadMessage.visibility = View.GONE
             }
             R.id.button_hangup_call -> {
                 currentsession.hangUp(HashMap())
@@ -191,15 +200,19 @@ class VideoCallActivity : BaseActivity(),
 
     override fun onLocalVideoTrackReceive(p0: QBRTCSession?, viewTrack: QBRTCVideoTrack?) {
         Log.d(TAG, "onLocalVideoTrackReceive() run")
-        isLocalVideoFullScreen = true
-        localVideoTrack = viewTrack!!
-        localVideoTrack.let { fillVideoView(localVideoView, it, false) }
-        isLocalVideoFullScreen = false
+        if (viewTrack != null) {
+            isLocalVideoFullScreen = true
+            localVideoTrack = viewTrack!!
+            localVideoTrack.let { fillVideoView(localVideoView, it, false) }
+            isLocalVideoFullScreen = false
+        }
     }
 
     override fun onRemoteVideoTrackReceive(p0: QBRTCSession?, p1: QBRTCVideoTrack?, p2: Int?) {
-        fillVideoView(remoteFullScreenVideoView!!, p1!!, true)
-        updateVideoView(remoteFullScreenVideoView!!, false, RendererCommon.ScalingType.SCALE_ASPECT_FILL)
+        if (p1 != null) {
+            fillVideoView(remoteFullScreenVideoView!!, p1!!, true)
+            updateVideoView(remoteFullScreenVideoView!!, false, RendererCommon.ScalingType.SCALE_ASPECT_FILL)
+        }
     }
 
     override fun onUserNotAnswer(p0: QBRTCSession?, p1: Int?) {
@@ -212,6 +225,8 @@ class VideoCallActivity : BaseActivity(),
         releaseCurrentSession()
         releaseView()
         AppUtils.isVideoHangUp = true
+        AppUtils.qbrtcVideoTrackLocal = null
+        AppUtils.qbrtcVideoTrackRemote = null
         WebrtcSessionManagement.setCurrentSession(null)
         finish()
     }

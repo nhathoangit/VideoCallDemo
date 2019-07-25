@@ -102,7 +102,7 @@ public class HomeFragment extends BaseFragment implements HomeContract.HomeView,
 
     @Override
     public void createChatSuccess(QBChatDialog qbChatDialog) {
-        addFragment(ChatFragment.newInstance(qbChatDialog, false), true);
+        addFragment(ChatFragment.newInstance(qbChatDialog, false, null), true);
     }
 
     @Override

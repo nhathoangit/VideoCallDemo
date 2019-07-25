@@ -10,6 +10,7 @@ import com.nhat910.videocalldemo.interfaces.ConfirmListener;
 import com.nhat910.videocalldemo.others.Constant;
 import com.nhat910.videocalldemo.others.MessageDialog;
 import com.quickblox.videochat.webrtc.QBRTCSession;
+import com.quickblox.videochat.webrtc.view.QBRTCVideoTrack;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -17,7 +18,7 @@ import java.util.List;
 
 public class AppUtils {
     public static boolean isVideoHangUp = false;
-    public static QBRTCSession qbrtcSession;
+    public static QBRTCVideoTrack qbrtcVideoTrackLocal,qbrtcVideoTrackRemote;
 
     public static void showDialogMessage(Context context, String title, String content, @Nullable ConfirmListener listener) {
         MessageDialog messageDialog = new MessageDialog(context, title, content, listener);
