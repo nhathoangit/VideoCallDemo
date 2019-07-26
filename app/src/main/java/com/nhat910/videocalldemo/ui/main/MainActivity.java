@@ -3,11 +3,11 @@ package com.nhat910.videocalldemo.ui.main;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import com.nhat910.videocalldemo.R;
 import com.nhat910.videocalldemo.interfaces.ReceiveCallListener;
 import com.nhat910.videocalldemo.others.Constant;
+import com.nhat910.videocalldemo.others.RingToneService;
 import com.nhat910.videocalldemo.ui.base.BaseActivity;
 import com.nhat910.videocalldemo.ui.home.HomeFragment;
 import com.nhat910.videocalldemo.ui.receivecall.ReceiveCallFragment;
@@ -27,6 +27,7 @@ import butterknife.ButterKnife;
 public class MainActivity extends BaseActivity implements ReceiveCallListener, MainContract.MainView, QBRTCClientVideoTracksCallbacks<QBRTCSession> {
     QBRTCSession qbrtcSession;
     MainPresenterImp presenterImp;
+    RingToneService ringToneService;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -46,6 +47,7 @@ public class MainActivity extends BaseActivity implements ReceiveCallListener, M
 
     private void init() {
         QBRTCClient qbrtcClient = QBRTCClient.getInstance(this);
+        ringToneService = new RingToneService(this);
         presenterImp.addSignaling(qbrtcClient);
         replaceFragment(new HomeFragment(), false);
     }
@@ -53,20 +55,22 @@ public class MainActivity extends BaseActivity implements ReceiveCallListener, M
     @Override
     public void inComingCall(QBRTCSession qbrtcSession) {
         this.qbrtcSession = qbrtcSession;
-        WebrtcSessionManagement.INSTANCE.setCurrentSession(qbrtcSession);
+        ringToneService.playService();
         addFragment(ReceiveCallFragment.newInstance(qbrtcSession.getCallerID(), this), true);
     }
 
     @Override
     public void closeReceiveCallFragment() {
         onBackPressed();
+        ringToneService.stopService();
     }
 
     @Override
     public void createRoomChatSuccess(QBChatDialog qbChatDialog) {
+        WebrtcSessionManagement.INSTANCE.setCurrentSession(qbrtcSession);
         onBackPressed();
         Intent intent = new Intent(this, VideoCallActivity.class);
-        intent.putExtra(Constant.DATA_SEND_CHAT_DIALOG,qbChatDialog);
+        intent.putExtra(Constant.DATA_SEND_CHAT_DIALOG, qbChatDialog);
         startActivity(intent);
     }
 
@@ -79,6 +83,7 @@ public class MainActivity extends BaseActivity implements ReceiveCallListener, M
     @Override
     public void onAcceptCallListener() {
         qbrtcSession.acceptCall(new HashMap<String, String>());
+        ringToneService.stopService();
         qbrtcSession.addVideoTrackCallbacksListener(this);
         presenterImp.createPrivateDialog(qbrtcSession.getCallerID());
     }
@@ -86,7 +91,6 @@ public class MainActivity extends BaseActivity implements ReceiveCallListener, M
     @Override
     public void onRejectCallListener() {
         qbrtcSession.rejectCall(new HashMap<String, String>());
-        onBackPressed();
     }
 
     @Override
