@@ -71,6 +71,7 @@ public class MainPresenterImp extends BasePresenter<MainContract.MainView> imple
     @Override
     public void onReceiveNewSession(QBRTCSession qbrtcSession) {
         getView().inComingCall(qbrtcSession);
+        Log.e("KKK", "onReceiveNewSession : $p0");
     }
 
     @Override

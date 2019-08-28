@@ -27,6 +27,8 @@
         </activity>
         <activity android:name=".ui.main.MainActivity"/>
         <activity android:name=".ui.videocall.VideoCallActivity"/>
+        <service android:name=".videoservice.CallService" />
+        <service android:name=".loginservice.LoginService" />
     </application>
 
 </manifest>

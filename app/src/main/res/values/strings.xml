@@ -28,4 +28,38 @@
     <string name="signup">SignUp</string>
     <string name="calling_you">calling you …</string>
     <string name="descripe_signup">Please enter username and password to sign up accont.</string>
+    <!--Error signal-->
+    <string name="dlg_signal_error">Disconnected… Please check your Internet connection!</string>
+    <!--Notification-->
+    <string name="notification_title">You have an active call</string>
+    <string name="notification_text">Touch takes you back to the call %1$s</string>
+
+    <!--Call Settings-->
+    <string name="pref_answer_time_interval_key">answer_time_interval</string>
+    <string name="pref_answer_time_interval_default_value">60</string>
+    <string name="pref_disconnect_time_interval_key">disconnect_time_interval</string>
+    <string name="pref_disconnect_time_interval_default_value">10</string>
+    <string name="pref_dialing_time_interval_key">Dialing_time_interval</string>
+    <string name="pref_dialing_time_interval_default_value">5</string>
+
+    <!--Pref manager-->
+    <string name="pref_manage_speakerphone_by_proximity_key">manage_speakerphone_by_proximity_preference</string>
+    <string name="pref_manage_speakerphone_by_proximity_default">false</string>
+    <string name="pref_audiocodec_key">pref_audio_codec</string>
+    <string name="pref_audiocodec_def">ISAC</string>
+    <string name="pref_disable_built_in_aec_key">disable_built_in_aec_preference</string>
+    <string name="pref_disable_built_in_aec_default">false</string>
+    <string name="pref_noaudioprocessing_key">audioprocessing_preference</string>
+    <string name="pref_noaudioprocessing_default">false</string>
+    <string name="pref_opensles_key">opensles_preference</string>
+    <string name="pref_opensles_default">false</string>
+    <string name="pref_hwcodec_key">hwcodec_preference</string>
+    <string name="pref_hwcodec_default">true</string>
+    <string name="pref_resolution_key">resolution_preference</string>
+    <string name="pref_startbitratevalue_key">startbitratevalue_preference</string>
+    <string name="pref_startbitratevalue_default">0</string>
+    <string name="pref_frame_rate_key">frame_rate</string>
+    <string name="pref_frame_rate_default">0</string>
+    <string name="pref_videocodec_key">videocodec_preference</string>
+
 </resources>
